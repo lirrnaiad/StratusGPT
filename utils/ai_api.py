@@ -3,10 +3,11 @@ import os
 
 from openai import OpenAI
 from dotenv import load_dotenv
+from utils.personality import GENERAL_PROMPT, WEATHER_PROMPT
 
 load_dotenv()
 
-def prompt_ai(prompt: str) -> str:
+def prompt_ai(command:str, prompt: str) -> str:
     """Asks for a response from the AI given the prompt"""
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
@@ -16,10 +17,7 @@ def prompt_ai(prompt: str) -> str:
     completion = client.chat.completions.create(
         model="cognitivecomputations/dolphin3.0-r1-mistral-24b:free",
         messages=[
-            {
-                "role": "user",
-                "content": f"Reply in 100 words or less using the following prompt: \n\n{prompt}"
-            }
+            generate_prompt(command, prompt)
         ]
     )
 
@@ -33,3 +31,17 @@ def remove_thought_process(response: str) -> str:
 
     return cleaned_response
 
+
+def generate_prompt(command: str, user_prompt: str) -> dict:
+    prompt = {
+        "role": "user",
+        "content": ""
+    }
+
+    match command:
+        case "p":
+            prompt["content"] += f"{GENERAL_PROMPT} {user_prompt}"
+        case "wp":
+            prompt["content"] += f"{WEATHER_PROMPT} {user_prompt}"
+
+    return prompt

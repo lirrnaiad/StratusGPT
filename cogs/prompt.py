@@ -9,7 +9,7 @@ class Prompt(commands.Cog):
     @commands.command()
     async def prompt(self, ctx, *, prompt: str):
         """Prompts the AI for a response."""
-        response = prompt_ai(prompt)
+        response = prompt_ai("p", prompt)
         await ctx.send(response)
 
 
