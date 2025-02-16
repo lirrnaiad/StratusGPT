@@ -1,21 +1,25 @@
 import inflect
 import json
+import pytz
 
 from datetime import datetime
 from discord.ext import commands
 from utils.weather_api import get_weather
+from timezonefinder import TimezoneFinder
 
 
-# Utility function for converting Unix datetime from API to a workable string
+# Utility function for converting Unix datetime from API to a workable string (used for last weather update from API)
 def convert_datetime(unix_timestamp: str) -> str:
     timestamp = int(unix_timestamp)
     return datetime.fromtimestamp(timestamp).strftime("%B %d, %Y, %#I:%M %p")
 
 
-# Utility function for converting Unix time from API to a workable string
-def convert_time(unix_timestamp: str) -> str:
+# Utility function for converting Unix time from API to a workable string (used for Sunrise and Sunset times)
+def convert_time(unix_timestamp: str, timezone: str) -> str:
     timestamp = int(unix_timestamp)
-    return datetime.fromtimestamp(timestamp).strftime("%#I:%M %p")
+    local_tz = pytz.timezone(timezone)
+    local_time = datetime.fromtimestamp(timestamp, local_tz)
+    return local_time.strftime("%#I:%M %p")
 
 
 # Utility function for converting wind speed direction in degrees (from North) to words
@@ -92,6 +96,12 @@ class Weather(commands.Cog):
             await ctx.send(f"Sorry, I couldn't find weather info for {location}.")
             return
 
+        # Timezone data
+        tf = TimezoneFinder()
+        lat = weather_data["coord"]["lat"]
+        lon = weather_data["coord"]["lon"]
+        timezone = tf.timezone_at(lng=lon, lat=lat)
+
         # Weather data
         city = weather_data["name"]
         country = weather_data["sys"]["country"]
@@ -105,8 +115,8 @@ class Weather(commands.Cog):
         pressure = weather_data["main"]["pressure"]
         pressure_desc = pressure_forecast(pressure)
         cloudiness = weather_data["clouds"]["all"]
-        sunrise = convert_time(weather_data["sys"]["sunrise"])
-        sunset = convert_time(weather_data["sys"]["sunset"])
+        sunrise = convert_time(weather_data["sys"]["sunrise"], timezone)
+        sunset = convert_time(weather_data["sys"]["sunset"], timezone)
 
         response = (
             f"📍 **Weather Report for {city}, {country}**\n"
