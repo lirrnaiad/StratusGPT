@@ -121,10 +121,10 @@ class Weather(commands.Cog):
         response = (
             f"📍 **Weather Report for {city}, {country}**\n"
             f"As of {current_time}\n"
-            f"- **Current Temperature**: {temp:.0f}°C, feeling like {feels_like:.0f}°C\n"
-            f"- **Skies**: {weather_desc}\n"
-            f"- **Humidity**: {humidity}% | **Wind Speed**: {wind_speed} m/s ({wind_direction})\n"
-            f"- **Pressure**: {pressure} hPa ({pressure_desc}) | **Cloud Cover**: {cloudiness}% ☁️\n"
+            f"- **Current Temperature:** {temp:.0f}°C, feeling like {feels_like:.0f}°C\n"
+            f"- **Skies:** {weather_desc}\n"
+            f"- **Humidity:** {humidity}% | **Wind Speed:** {wind_speed} m/s ({wind_direction})\n"
+            f"- **Pressure:** {pressure} hPa ({pressure_desc}) | **Cloud Cover:** {cloudiness}% ☁️\n"
             f"- 🌅 **Sunrise** at {sunrise} | 🌇 **Sunset** at {sunset}"
         )
 
