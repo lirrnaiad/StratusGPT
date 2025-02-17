@@ -5,6 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from utils.personality import GENERAL_PROMPT, WEATHER_PROMPT
 
+
 load_dotenv()
 
 def prompt_ai(command:str, prompt: str) -> str:
@@ -25,13 +26,6 @@ def prompt_ai(command:str, prompt: str) -> str:
     return remove_thought_process(response)
 
 
-def remove_thought_process(response: str) -> str:
-    pattern = r"<think>.*?<\/think>\s*"
-    cleaned_response = re.sub(pattern, "", response, flags=re.DOTALL)
-
-    return cleaned_response
-
-
 def generate_prompt(command: str, user_prompt: str) -> dict:
     prompt = {
         "role": "user",
@@ -45,3 +39,10 @@ def generate_prompt(command: str, user_prompt: str) -> dict:
             prompt["content"] += f"{WEATHER_PROMPT} {user_prompt}"
 
     return prompt
+
+
+def remove_thought_process(response: str) -> str:
+    pattern = r"<think>.*?<\/think>\s*"
+    cleaned_response = re.sub(pattern, "", response, flags=re.DOTALL)
+
+    return cleaned_response

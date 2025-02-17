@@ -83,6 +83,42 @@ def get_weather_description(weather_data: json) -> str:
     return formatted_skies.capitalize()
 
 
+def generate_response(weather_data: json) -> str:
+    # Timezone data
+    tf = TimezoneFinder()
+    lat = weather_data["coord"]["lat"]
+    lon = weather_data["coord"]["lon"]
+    timezone = tf.timezone_at(lng=lon, lat=lat)
+
+    # Weather data
+    city = weather_data["name"]
+    country = weather_data["sys"].get("country", "")
+    current_time = convert_datetime(weather_data["dt"])
+    temp = weather_data["main"]["temp"]
+    feels_like = weather_data["main"]["feels_like"]
+    weather_desc = get_weather_description(weather_data)
+    humidity = weather_data["main"]["humidity"]
+    wind_speed = weather_data["wind"]["speed"]
+    wind_direction = get_cardinal_direction(weather_data["wind"]["deg"])
+    pressure = weather_data["main"]["pressure"]
+    pressure_desc = pressure_forecast(pressure)
+    cloudiness = weather_data["clouds"]["all"]
+    sunrise = convert_time(weather_data["sys"]["sunrise"], timezone)
+    sunset = convert_time(weather_data["sys"]["sunset"], timezone)
+
+    response = (
+        f"📍 **Weather Report for {city}, {country}**\n"
+        f"As of {current_time}\n"
+        f"- **Current Temperature:** {temp:.0f}°C, feeling like {feels_like:.0f}°C\n"
+        f"- **Skies:** {weather_desc}\n"
+        f"- **Humidity:** {humidity}% | **Wind Speed:** {wind_speed} m/s ({wind_direction})\n"
+        f"- **Pressure:** {pressure} hPa ({pressure_desc}) | **Cloud Cover:** {cloudiness}% ☁️\n"
+        f"- 🌅 **Sunrise** at {sunrise} | 🌇 **Sunset** at {sunset}"
+    )
+
+    return response
+
+
 class Weather(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -96,37 +132,7 @@ class Weather(commands.Cog):
             await ctx.send(f"Sorry, I couldn't find weather info for {location}.")
             return
 
-        # Timezone data
-        tf = TimezoneFinder()
-        lat = weather_data["coord"]["lat"]
-        lon = weather_data["coord"]["lon"]
-        timezone = tf.timezone_at(lng=lon, lat=lat)
-
-        # Weather data
-        city = weather_data["name"]
-        country = weather_data["sys"]["country"]
-        current_time = convert_datetime(weather_data["dt"])
-        temp = weather_data["main"]["temp"]
-        feels_like = weather_data["main"]["feels_like"]
-        weather_desc = get_weather_description(weather_data)
-        humidity = weather_data["main"]["humidity"]
-        wind_speed = weather_data["wind"]["speed"]
-        wind_direction = get_cardinal_direction(weather_data["wind"]["deg"])
-        pressure = weather_data["main"]["pressure"]
-        pressure_desc = pressure_forecast(pressure)
-        cloudiness = weather_data["clouds"]["all"]
-        sunrise = convert_time(weather_data["sys"]["sunrise"], timezone)
-        sunset = convert_time(weather_data["sys"]["sunset"], timezone)
-
-        response = (
-            f"📍 **Weather Report for {city}, {country}**\n"
-            f"As of {current_time}\n"
-            f"- **Current Temperature:** {temp:.0f}°C, feeling like {feels_like:.0f}°C\n"
-            f"- **Skies:** {weather_desc}\n"
-            f"- **Humidity:** {humidity}% | **Wind Speed:** {wind_speed} m/s ({wind_direction})\n"
-            f"- **Pressure:** {pressure} hPa ({pressure_desc}) | **Cloud Cover:** {cloudiness}% ☁️\n"
-            f"- 🌅 **Sunrise** at {sunrise} | 🌇 **Sunset** at {sunset}"
-        )
+        response = generate_response(weather_data)
 
         await ctx.send(response)
 

@@ -19,11 +19,11 @@ async def on_ready():
 
     await bot.load_extension("cogs.weather")
     await bot.load_extension("cogs.prompt")
+    await bot.load_extension("cogs.wprompt")
+
 
 @bot.event
 async def on_message(message):
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
     await bot.process_commands(message)
 
 bot.run(TOKEN)
