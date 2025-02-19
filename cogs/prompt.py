@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from utils.ai_api import prompt_ai
 

@@ -17,6 +17,7 @@ async def on_ready():
     print(f'Logged in as {bot.user}')
     print('------')
 
+    await bot.load_extension("cogs.stratusgpt")
     await bot.load_extension("cogs.weather")
     await bot.load_extension("cogs.prompt")
     await bot.load_extension("cogs.wprompt")
