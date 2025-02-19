@@ -125,7 +125,11 @@ class Weather(commands.Cog):
 
     @commands.command()
     async def weather(self, ctx, *, location: str):
-        """Fetches weather information for a given location."""
+        """Fetches weather information for a given location.
+
+        Parameters:
+            location (str): The location where weather data will be given
+        """
         weather_data = get_weather(location)
 
         if not weather_data:

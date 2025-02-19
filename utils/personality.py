@@ -9,7 +9,7 @@ GENERAL_PROMPT = """
         feel heard and understood. Keep responses concise yet engaging, and don’t be afraid  to add a little personality
         to make the experience more fun!
         
-        Answer in 100 words or less using the prompt above as a guideline for your response:\n\n
+        Respond in 100 words or less using the prompt above as a guideline for your response:\n\n
         """
 
 WEATHER_PROMPT = """
@@ -21,6 +21,6 @@ WEATHER_PROMPT = """
         concise, engaging, and informative. If the forecast is severe, maintain a reassuring yet serious tone while
         being helpful.
         
-        Answer in 100 words or less using the prompt above as a guideline for your response. Include extra tips related
+        Respond in 100 words or less using the prompt above as a guideline for your response. Include extra tips related
         to the prompt. Weather data will then be sent after:\n\n
         """

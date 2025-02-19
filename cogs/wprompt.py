@@ -10,11 +10,16 @@ class WeatherPrompt(commands.Cog):
 
     @commands.command()
     async def wprompt(self, ctx, *, args: str):
+        """Prompts AI with weather data of location given
+
+        Parameters:
+            args (str): The location and prompt separated by a semicolon (;)
+        """
         # Split the arguments into location and prompt
         try:
             location, prompt = args.split(";", 1)
         except ValueError:
-            await ctx.send("Please provide both location and prompt separated by a semicolon (;)")
+            await ctx.send("Usage: `!wprompt [location]; [prompt]`")
             return
 
         weather_data = get_weather(location.strip())
@@ -23,7 +28,7 @@ class WeatherPrompt(commands.Cog):
             return
 
         prompt += generate_response(weather_data)
-        response = prompt_ai("wp", prompt)
+        response = prompt_ai("wp", prompt.strip())
         await ctx.send(response)
 
 
