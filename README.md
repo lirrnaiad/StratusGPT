@@ -2,7 +2,7 @@
 
 ### StratusGPT is a Discord bot created as a final project for CS50P: Introduction to Programming with Python. This bot provides weather information and access to an LLM (Dolphin 3.0 R1 Mistral 24b) with various commands.
 
-#### Video Demo:  https://youtu.be/VDBA5NHK-Oo?si=2MQ_AmJElUHizj6P
+#### Video Demo:  https://youtu.be/VDBA5NHK-Oo
 
 ## Commands
 - ``!stratusgpt``: Displays information about the bot and its commands.
